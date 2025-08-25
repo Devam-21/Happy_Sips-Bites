@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Sips and Bites Café - A Perfect Sip, A Delicious Bite!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cafe-blue': '#2563EB',
+                        'cafe-white': '#FFFFFF',
+                        'cafe-yellow': '#F59E0B',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.3)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%232563EB"/><path d="M0 0L100 100" stroke="%23FFFFFF" stroke-width="10"/><path d="M100 0L0 100" stroke="%23FFFFFF" stroke-width="10"/></svg>');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .menu-item {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cart-item {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .leaf-divider {
+            position: relative;
+            height: 50px;
+            overflow: hidden;
+        }
+        
+        .leaf-divider::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: #2563EB;
+            border-radius: 0 0 50% 50%;
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .faq-active .faq-answer {
+            max-height: 500px;
+        }
+        
+        .page-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .page-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .map-container {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .legal-content {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    
+
+/* Automatic Scrolling Gallery */
+@keyframes gallery-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.gallery-outer { position: relative; overflow: hidden; }
+.gallery-track { display: flex; gap: 1.5rem; width: max-content; will-change: transform; animation: gallery-scroll 30s linear infinite; }
+.gallery-track:hover { animation-play-state: paused; }
+.gallery-img { width: 20rem; height: 14rem; object-fit: cover; border-radius: 1rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+
+
+        /* Bestsellers carousel */
+        .carousel-track { display: flex; gap: 1.5rem; transition: transform 0.6s ease-in-out; }
+        .carousel-card { min-width: 300px; max-width: 300px; margin-right: 1.5rem; }
+        .carousel-wrap { padding: 1rem 0; }
+        .carousel-nav { position: absolute; top: 50%; transform: translateY(-50%); }
+</style>
+</head>
+<body class="bg-cafe-white text-black">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md fixed w-full z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <a href="#home" class="text-2xl font-bold text-cafe-blue flex items-center">
+                    <i class="fas fa-leaf mr-2"></i> Happy Sips & Bites
+                </a>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button id="menu-btn" class="text-cafe-blue focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex space-x-10">
+                    <button onclick="showPage('home')" class="nav-link hover:text-cafe-blue">Home</button>
+                    <button onclick="showPage('menu')" class="nav-link hover:text-cafe-blue">Menu</button>
+                    <button onclick="showPage('order')" class="nav-link hover:text-cafe-blue">Order Online</button>
+                    <button onclick="showPage('about')" class="nav-link hover:text-cafe-blue">About Us</button>
+                    <button onclick="showPage('contact')" class="nav-link hover:text-cafe-blue">Contact</button>
+                
+                    <button onclick="showPage('chooseus')" class="nav-link hover:text-cafe-blue">Why Choose Us</button>
+                    <button onclick="showPage('reviews')" class="nav-link hover:text-cafe-blue">Reviews</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white pb-4">
+            <button onclick="showPage('home')" class="block w-full text-left py-2 px-4 hover:bg-cafe-white nav-link">Home</button>
+            <button onclick="showPage('menu')" class="block w-full text-left py-2 px-4 hover:bg-cafe-white nav-link">Menu</button>
+            <button onclick="showPage('order')" class="block w-full text-left py-2 px-4 hover:bg-cafe-white nav-link">Order Online</button>
+            <button onclick="showPage('about')" class="block w-full text-left py-2 px-4 hover:bg-cafe-white nav-link">About Us</button>
+            <button onclick="showPage('contact')" class="block w-full text-left py-2 px-4 hover:bg-cafe-white nav-link">Contact</button>
+                    <button onclick="showPage('chooseus')" class="block w-full text-left py-2 px-4 hover:bg-cafe-white nav-link">Why Choose Us</button>
+            <button onclick="showPage('reviews')" class="block w-full text-left py-2 px-4 hover:bg-cafe-white nav-link">Reviews</button>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div id="page-content" class="pt-16">
+        <!-- Home Page -->
+        <section id="home" class="page-section">
+            <!-- Hero Section -->
+            <div class="hero-bg py-20 md:py-32 text-white text-center">
+                <div class="max-w-4xl mx-auto px-4">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6">A Perfect Sip, A Delicious Bite!</h1>
+                    <p class="text-xl mb-10">Experience the perfect blend of flavor and freshness at our eco-friendly café</p>
+                    <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-6">
+                        <button onclick="showPage('menu')" class="bg-cafe-blue hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full">See Menu</button>
+                        <button onclick="showPage('order')" class="bg-white hover:bg-gray-100 text-cafe-blue font-bold py-3 px-8 rounded-full">Order Now</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Featured Sections -->
+            <div class="max-w-6xl mx-auto px-4 py-16">
+                <!-- About Us Preview -->
+                <div class="mb-16 page-section">
+                    <h2 class="text-3xl font-bold text-center mb-10 text-cafe-blue">Our Story</h2>
+                    <div class="md:flex items-center">
+                        <div class="md:w-1/2 mb-6 md:mb-0 md:pr-8">
+                            <div class="bg-cafe-blue h-64 rounded-lg flex items-center justify-center text-white text-5xl">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                        </div>
+                        <div class="md:w-1/2">
+                            <h3 class="text-2xl font-semibold mb-4">From our garden to your cup</h3>
+                            <p class="mb-4">Happy Sips and Bites began with a simple mission: to create a cozy space where people can enjoy high-quality, sustainably sourced coffee and food while connecting with nature.</p>
+                            <p>We're committed to reducing our environmental footprint through compostable packaging, energy-efficient equipment, and supporting local organic farmers.</p>
+                            <button onclick="showPage('about')" class="inline-block mt-6 text-cafe-blue font-semibold hover:underline">Learn more about us →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Popular Menu Items -->
+                <div class="mb-16 page-section">
+                    <h2 class="text-3xl font-bold text-center mb-10 text-cafe-blue">Customer Favorites</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden menu-item">
+                            <div class="h-48 bg-cafe-blue flex items-center justify-center text-white text-5xl">
+                                <i class="fas fa-mug-hot"></i>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2">Happiness Blend Coffee</h3>
+                                <p class="text-gray-600 mb-4">Our signature medium-roast blend with notes of chocolate and caramel.</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-cafe-blue font-bold">$4.50</span>
+                                    <button class="text-black hover:text-cafe-blue">
+                                        <i class="fas fa-plus-circle text-xl"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden menu-item">
+                            <div class="h-48 bg-cafe-blue flex items-center justify-center text-white text-5xl">
+                                <i class="fas fa-cookie"></i>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2">Avocado Toast Deluxe</h3>
+                                <p class="text-gray-600 mb-4">Sourdough toast with smashed avocado, cherry tomatoes, and microgreens.</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-cafe-blue font-bold">$8.75</span>
+                                    <button class="text-black hover:text-cafe-blue">
+                                        <i class="fas fa-plus-circle text-xl"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden menu-item">
+                            <div class="h-48 bg-cafe-blue flex items-center justify-center text-white text-5xl">
+                                <i class="fas fa-ice-cream"></i>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2">Matcha Green Tea Latte</h3>
+                                <p class="text-gray-600 mb-4">Ceremonial-grade matcha whisked with steamed milk of your choice.</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-cafe-blue font-bold">$5.25</span>
+                                    <button class="text-black hover:text-cafe-blue">
+                                        <i class="fas fa-plus-circle text-xl"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-10">
+                        <button onclick="showPage('menu')" class="inline-block bg-cafe-blue hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full">View Full Menu</button>
+                    </div>
+                </div>
+                
+                
+            <!-- 🚀 Bestsellers Carousel (inserted) -->
+            <div class="max-w-6xl mx-auto px-4 py-16">
+                <h2 class="text-3xl font-bold text-center mb-10 text-cafe-blue">Bestsellers</h2>
+                <div class="relative overflow-hidden carousel-wrap">
+                    <div id="carousel-track" class="carousel-track">
+                        <div class="carousel-card bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="h-48 bg-cafe-blue flex items-center justify-center text-white text-5xl"><i class="fas fa-coffee"></i></div>
+                            <div class="p-6"><h3 class="font-semibold text-lg">Espresso Shot</h3><p class="text-gray-600">Strong, bold, and energizing.</p></div>
+                        </div>
+                        <div class="carousel-card bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="h-48 bg-cafe-blue flex items-center justify-center text-white text-5xl"><i class="fas fa-croissant"></i></div>
+                            <div class="p-6"><h3 class="font-semibold text-lg">Cheese Croissant</h3><p class="text-gray-600">Flaky & cheesy delight.</p></div>
+                        </div>
+                        <div class="carousel-card bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="h-48 bg-cafe-blue flex items-center justify-center text-white text-5xl"><i class="fas fa-ice-cream"></i></div>
+                            <div class="p-6"><h3 class="font-semibold text-lg">Chocolate Sundae</h3><p class="text-gray-600">Creamy and indulgent.</p></div>
+                        </div>
+                        <div class="carousel-card bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="h-48 bg-cafe-blue flex items-center justify-center text-white text-5xl"><i class="fas fa-bread-slice"></i></div>
+                            <div class="p-6"><h3 class="font-semibold text-lg">Banana Bread</h3><p class="text-gray-600">Warm and home-baked.</p></div>
+                        </div>
+                    </div>
+                    <button onclick="prevSlide()" class="carousel-nav -left-4 bg-cafe-blue text-white p-2 rounded-full" style="left:8px;"><i class="fas fa-chevron-left"></i></button>
+                    <button onclick="nextSlide()" class="carousel-nav -right-4 bg-cafe-blue text-white p-2 rounded-full" style="right:8px;"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+
+                <!-- Enhanced Testimonials -->
+                <div class="page-section">
+                    <h2 class="text-3xl font-bold text-center mb-12 text-cafe-blue">What Our Customers Love</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+                        <div class="text-center p-6 bg-white rounded-lg shadow-md transform hover:scale-105 transition-transform duration-300">
+                            <div class="text-5xl text-cafe-blue mb-4">
+                                <i class="fas fa-coffee"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Premium Quality</h3>
+                            <p class="text-gray-600">"Best coffee in town! They source their beans ethically and it really shows in the flavor."</p>
+                        </div>
+                        
+                        <div class="text-center p-6 bg-white rounded-lg shadow-md transform hover:scale-105 transition-transform duration-300">
+                            <div class="text-5xl text-cafe-blue mb-4">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Eco-Friendly</h3>
+                            <p class="text-gray-600">"Love their commitment to sustainability. Everything is compostable and they support local farmers!"</p>
+                        </div>
+                        
+                        <div class="text-center p-6 bg-white rounded-lg shadow-md transform hover:scale-105 transition-transform duration-300">
+                            <div class="text-5xl text-cafe-blue mb-4">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Cozy Atmosphere</h3>
+                            <p class="text-gray-600">"The perfect place to work or relax. So many plants and natural light - it's like an urban oasis!"</p>
+                        </div>
+                        
+                        <div class="text-center p-6 bg-white rounded-lg shadow-md transform hover:scale-105 transition-transform duration-300">
+                            <div class="text-5xl text-cafe-blue mb-4">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Friendly Staff</h3>
+                            <p class="text-gray-600">"The baristas remember my name and my usual order. They make you feel like family!"</p>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Reviews -->
+                    <h3 class="text-2xl font-bold text-center mb-8 text-black">Customer Reviews</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-3">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="text-sm text-gray-500">2 days ago</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">"The ambiance here is absolutely magical! The hanging plants, comfortable seating, and soft background music create the perfect atmosphere for both work and relaxation. I especially love the corner nook with the vintage bookshelf - it's my favorite spot to enjoy their delicious matcha latte while getting some reading done."</p>
+                            <div class="flex items-center">
+                                <div class="h-10 w-10 rounded-full bg-cafe-blue flex items-center justify-center text-white mr-3">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div>
+                                    <span class="font-semibold block">Sarah M.</span>
+                                    <span class="text-sm text-gray-500">Regular Customer</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-3">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="text-sm text-gray-500">1 week ago</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">"This café has become my second office! The WiFi is reliable, the power outlets are plentiful, and the staff never rushes you. The natural light streaming through the large windows makes it perfect for productivity. Their avocado toast with a side of happiness blend coffee is my go-to breakfast meeting combo. The eco-friendly approach is just the cherry on top!"</p>
+                            <div class="flex items-center">
+                                <div class="h-10 w-10 rounded-full bg-cafe-blue flex items-center justify-center text-white mr-3">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div>
+                                    <span class="font-semibold block">James L.</span>
+                                    <span class="text-sm text-gray-500">Remote Worker</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-3">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="text-sm text-gray-500">3 days ago</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">"The outdoor patio is absolutely delightful! Surrounded by herb gardens and twinkling fairy lights, it's the perfect evening spot. I appreciate how they use their own fresh herbs in the drinks and dishes. The lavender honey latte made with lavender from their garden is extraordinary. This place truly embodies the farm-to-table concept in the most charming way possible."</p>
+                            <div class="flex items-center">
+                                <div class="h-10 w-10 rounded-full bg-cafe-blue flex items-center justify-center text-white mr-3">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div>
+                                    <span class="font-semibold block">Maria K.</span>
+                                    <span class="text-sm text-gray-500">Food Blogger</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-3">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <span class="text-sm text-gray-500">5 days ago</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">"The attention to detail in the interior design is impressive. From the reclaimed wood tables to the living wall behind the counter, every element creates a warm, inviting atmosphere. The gentle hum of conversation mixed with the aroma of freshly ground coffee makes this the perfect urban retreat. I particularly love how they've incorporated local artwork on the walls - it really connects the café to our community."</p>
+                            <div class="flex items-center">
+                                <div class="h-10 w-10 rounded-full bg-cafe-blue flex items-center justify-center text-white mr-3">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div>
+                                    <span class="font-semibold block">David T.</span>
+                                    <span class="text-sm text-gray-500">Interior Designer</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Statistics Section -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
+                        <div class="text-center p-6 bg-white rounded-lg shadow-md">
+                            <div class="text-4xl font-bold text-cafe-blue mb-2">500+</div>
+                            <p class="text-gray-600">Happy Customers Daily</p>
+                        </div>
+                        <div class="text-center p-6 bg-white rounded-lg shadow-md">
+                            <div class="text-4xl font-bold text-cafe-blue mb-2">98%</div>
+                            <p class="text-gray-600">Positive Reviews</p>
+                        </div>
+                        <div class="text-center p-6 bg-white rounded-lg shadow-md">
+                            <div class="text-4xl font-bold text-cafe-blue mb-2">50+</div>
+                            <p class="text-gray-600">Menu Items</p>
+                        </div>
+                        <div class="text-center p-6 bg-white rounded-lg shadow-md">
+                            <div class="text-4xl font-bold text-cafe-blue mb-2">5</div>
+                            <p class="text-gray-600">Years Serving</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Newsletter Section -->
+                <div class="page-section bg-cafe-blue text-white rounded-2xl p-8 md:p-12 mt-16">
+                    <div class="max-w-3xl mx-auto text-center">
+                        <h2 class="text-3xl font-bold mb-4">Join Our Café Community</h2>
+                        <p class="mb-6">Subscribe to our newsletter and be the first to know about special offers, new menu items, and events!</p>
+                        <form class="flex flex-col md:flex-row gap-4">
+                            <input type="email" placeholder="Enter your email" class="flex-grow px-4 py-3 rounded-full text-black focus:outline-none focus:ring-2 focus:ring-white">
+                            <button type="submit" class="bg-white text-cafe-blue font-bold py-3 px-8 rounded-full hover:bg-cafe-white transition-colors">Subscribe</button>
+                        </form>
+                        <p class="text-sm mt-4 opacity-80">We respect your privacy. Unsubscribe at any time.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Enhanced Café Atmosphere -->
+            <div class="bg-cafe-yellow text-white py-20 leaf-divider">
+                <div class="max-w-6xl mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-center mb-12">Experience Our Ambiance</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+                        <div class="space-y-6">
+                            <h3 class="text-2xl font-semibold">A Sanctuary in the City</h3>
+                            <p class="text-cafe-white">Step into our urban oasis where the hustle of the city fades away. Our space features:</p>
+                            
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-cafe-blue mt-1 mr-3"></i>
+                                    <span class="text-cafe-white">Lush living walls and over 200 plants creating fresh air</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-cafe-blue mt-1 mr-3"></i>
+                                    <span class="text-cafe-white">Comfortable seating areas with ergonomic chairs and sofas</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-cafe-blue mt-1 mr-3"></i>
+                                    <span class="text-cafe-white">Natural light from floor-to-ceiling windows</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-cafe-blue mt-1 mr-3"></i>
+                                    <span class="text-cafe-white">Curated background music at perfect volume for conversation</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-cafe-blue mt-1 mr-3"></i>
+                                    <span class="text-cafe-white">Outdoor patio with herb garden and fairy lights</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="h-48 bg-cafe-white rounded-lg flex items-center justify-center text-cafe-blue text-5xl transform hover:scale-105 transition-transform duration-300">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <div class="h-48 bg-cafe-white rounded-lg flex items-center justify-center text-cafe-blue text-5xl transform hover:scale-105 transition-transform duration-300">
+                                <i class="fas fa-mug-hot"></i>
+                            </div>
+                            <div class="h-48 bg-cafe-white rounded-lg flex items-center justify-center text-cafe-blue text-5xl transform hover:scale-105 transition-transform duration-300">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <div class="h-48 bg-cafe-white rounded-lg flex items-center justify-center text-cafe-blue text-5xl transform hover:scale-105 transition-transform duration-300">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Atmosphere Highlights -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="text-center p-6 bg-cafe-white rounded-lg text-black">
+                            <div class="text-4xl mb-4 text-cafe-blue">
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <h4 class="font-semibold mb-2">Free High-Speed WiFi</h4>
+                            <p class="text-sm">Perfect for remote work and studying with plenty of power outlets</p>
+                        </div>
+                        
+                        <div class="text-center p-6 bg-cafe-white rounded-lg text-black">
+                            <div class="text-4xl mb-4 text-cafe-blue">
+                                <i class="fas fa-paint-brush"></i>
+                            </div>
+                            <h4 class="font-semibold mb-2">Local Art Gallery</h4>
+                            <p class="text-sm">Featuring rotating exhibitions from talented local artists</p>
+                        </div>
+                        
+                        <div class="text-center p-6 bg-cafe-white rounded-lg text-black">
+                            <div class="text-4xl mb-4 text-cafe-blue">
+                                <i class="fas fa-music"></i>
+                            </div>
+                            <h4 class="font-semibold mb-2">Live Music Nights</h4>
+                            <p class="text-sm">Enjoy acoustic performances every Friday evening</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<!-- Automatic Scrolling Gallery -->
+<div class="bg-white py-16">
+  <h2 class="text-3xl font-bold text-center mb-10 text-cafe-blue">Gallery</h2>
+  <div class="gallery-outer">
+    <div id="gallery-track" class="gallery-track">
+      <!-- Image set A -->
+      <img src="https://source.unsplash.com/400x300/?coffee" class="gallery-img" alt="Coffee">
+      <img src="https://source.unsplash.com/400x300/?cafe" class="gallery-img" alt="Cafe interior">
+      <img src="https://source.unsplash.com/400x300/?food" class="gallery-img" alt="Food">
+      <img src="https://source.unsplash.com/400x300/?dessert" class="gallery-img" alt="Dessert">
+      <img src="https://source.unsplash.com/400x300/?tea" class="gallery-img" alt="Tea">
+      <img src="https://source.unsplash.com/400x300/?restaurant" class="gallery-img" alt="Restaurant">
+
+      <!-- Image set B (duplicate for seamless loop) -->
+      <img src="https://source.unsplash.com/400x300/?coffee" class="gallery-img" alt="Coffee duplicate">
+      <img src="https://source.unsplash.com/400x300/?cafe" class="gallery-img" alt="Cafe interior duplicate">
+      <img src="https://source.unsplash.com/400x300/?food" class="gallery-img" alt="Food duplicate">
+      <img src="https://source.unsplash.com/400x300/?dessert" class="gallery-img" alt="Dessert duplicate">
+      <img src="https://source.unsplash.com/400x300/?tea" class="gallery-img" alt="Tea duplicate">
+      <img src="https://source.unsplash.com/400x300/?restaurant" class="gallery-img" alt="Restaurant duplicate">
+    </div>
+  </div>
+</div>
+<!-- End Automatic Scrolling Gallery -->
+
+
+            
+            <!-- Enhanced Social Proof Section -->
+            <div class="max-w-6xl mx-auto px-4 py-16">
+                <h2 class="text-3xl font-bold text-center mb-12 text-cafe-blue">As Featured In</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 items-center mb-16">
+                    <div class="h-20 bg-gray-100 rounded-lg flex items-center justify-center p-4 transform hover:scale-105 transition-transform duration-300">
+                        <span class="text-xl font-bold text-black text-center">Foodie Magazine</span>
+                    </div>
+                    <div class="h-20 bg-gray-100 rounded-lg flex items-center justify-center p-4 transform hover:scale-105 transition-transform duration-300">
+                        <span class="text-xl font-bold text-black text-center">Eco Life Journal</span>
+                    </div>
+                    <div class="h-20 bg-gray-100 rounded-lg flex items-center justify-center p-4 transform hover:scale-105 transition-transform duration-300">
+                        <span class="text-xl font-bold text-black text-center">Urban Taste Guide</span>
+                    </div>
+                    <div class="h-20 bg-gray-100 rounded-lg flex items-center justify-center p-4 transform hover:scale-105 transition-transform duration-300">
+                        <span class="text-xl font-bold text-black text-center">Café Review</span>
+                    </div>
+                </div>
+                
+                <!-- Press Quotes -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="text-cafe-blue text-3xl mb-4">"</div>
+                        <p class="text-gray-600 italic mb-4">"Happy Sips and Bites sets the new standard for sustainable cafés. Their commitment to environmental responsibility combined with exceptional quality makes them a true gem in the city's food scene."</p>
+                        <div class="flex items-center">
+                            <span class="font-semibold">- Eco Life Journal</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="text-cafe-blue text-3xl mb-4">"</div>
+                        <p class="text-gray-600 italic mb-4">"The atmosphere alone is worth the visit, but it's the perfectly crafted coffee and innovative menu that will keep you coming back. A must-visit destination for any coffee enthusiast."</p>
+                        <div class="flex items-center">
+                            <span class="font-semibold">- Café Review Magazine</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Menu Page -->
+        <section id="menu" class="page-section py-16 hidden">
+            <div class="max-w-6xl mx-auto px-4">
+                <h1 class="text-3xl md:text-4xl font-bold text-center mb-4 text-cafe-blue">Our Menu</h1>
+                <p class="text-center text-gray-600 mb-10">Discover our delicious offerings made with love and sustainable ingredients</p>
+                
+                <!-- Category Filters -->
+                <div class="flex flex-wrap justify-center gap-2 mb-10">
+                    <button class="category-btn px-4 py-2 rounded-full bg-cafe-blue text-white" data-category="all">All</button>
+                    <button class="category-btn px-4 py-2 rounded-full bg-white text-black hover:bg-cafe-blue hover:text-white" data-category="coffee">Coffee</button>
+                    <button class="category-btn px-4 py-2 rounded-full bg-white text-black hover:bg-cafe-blue hover:text-white" data-category="tea">Tea</button>
+                    <button class="category-btn px-4 py-2 rounded-full bg-white text-black hover:bg-cafe-blue hover:text-white" data-category="snacks">Snacks</button>
+                    <button class="category-btn px-4 py-2 rounded-full bg-white text-black hover:bg-cafe-blue hover:text-white" data-category="meals">Meals</button>
+                    <button class="category-btn px-4 py-2 rounded-full bg-white text-black hover:bg-cafe-blue hover:text-white" data-category="desserts">Desserts</button>
+                </div>
+                
+                <!-- Menu Items Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="menu-items">
+                    <!-- Coffee Items -->
+                    <div class="menu-item-card bg-white rounded-lg shadow-md overflow-hidden" data-category="coffee">
+                        <div class="h-48 bg-cafe-blue flex items-center justify-center text-white text-5xl">
+                            <i class="fas fa-mug-hot"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Happiness Blend Coffee</h3>
+                            <p class="text-gray-600 mb-4">Our signature medium-roast blend with notes of chocolate and caramel.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-cafe-blue font-bold">$4.50</span>
+                                <button class="add-to-cart-btn bg-cafe-blue hover:bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item-card bg-white rounded-lg shadow-md overflow-hidden" data-category="coffee">
+                        <div class="h-48 bg-cafe-blue flex items-center justify-center text-white text-5xl">
+                            <i class="fas fa-mug-hot"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Cappuccino Classic</h3>
+                            <p class="text-gray-600 mb-4">Perfectly balanced espresso with steamed milk and a thick layer of foam.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-cafe-blue font-bold">$4.75</span>
+                                <button class="add-to-cart-btn bg-cafe-blue hover:bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tea Items -->
+                    <div class="menu-item-card bg-white rounded-lg shadow-md overflow-hidden" data-category="tea">
+                        <div class="h-48 bg-cafe-blue flex items-center justify-center text-white text-5xl">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Matcha Green Tea Latte</h3>
+                            <p class="text-gray-600 mb-4">Ceremonial-grade matcha whisked with steamed milk of your choice.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-cafe-blue font-bold">$5.25</span>
+                                <button class="add-to-cart-btn bg-cafe-blue hover:bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Additional menu items would go here in a real implementation -->
+                    
+                    <!-- Snacks -->
+                    <div class="menu-item-card bg-white rounded-lg shadow-md overflow-hidden" data-category="snacks">
+                        <div class="h-48 bg-cafe-blue flex items-center justify-center text-white text-5xl">
+                            <i class="fas fa-cookie"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Almond Croissant</h3>
+                            <p class="text-gray-600 mb-4">Flaky croissant filled with almond cream and topped with sliced almonds.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-cafe-blue font-bold">$4.25</span>
+                                <button class="add-to-cart-btn bg-cafe-blue hover:bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Meals -->
+                    <div class="menu-item-card bg-white rounded-lg shadow-md overflow-hidden" data-category="meals">
+                        <div class="h-48 bg-cafe-blue flex items-center justify-center text-white text-5xl">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Avocado Toast Deluxe</h3>
+                            <p class="text-gray-600 mb-4">Sourdough toast with smashed avocado, cherry tomatoes, and microgreens.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-cafe-blue font-bold">$8.75</span>
+                                <button class="add-to-cart-btn bg-cafe-blue hover:bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Desserts -->
+                    <div class="menu-item-card bg-white rounded-lg shadow-md overflow-hidden" data-category="desserts">
+                        <div class="h-48 bg-cafe-blue flex items-center justify-center text-white text-5xl">
+                            <i class="fas fa-ice-cream"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Vegan Chocolate Cake</h3>
+                            <p class="text-gray-600 mb-4">Rich, moist chocolate cake made with plant-based ingredients.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-cafe-blue font-bold">$6.50</span>
+                                <button class="add-to-cart-btn bg-cafe-blue hover:bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Order Online Page -->
+        <section id="order" class="page-section py-16 hidden">
+            <div class="max-w-6xl mx-auto px-4">
+                <h1 class="text-3xl md:text-4xl font-bold text-center mb-4 text-cafe-blue">Order Online</h1>
+                <p class="text-center text-gray-600 mb-10">Enjoy our delicious offerings from the comfort of your home</p>
+                
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Menu Selection -->
+                    <div class="lg:w-2/3">
+                        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                            <h2 class="text-xl font-semibold mb-4">Select from our menu</h2>
+                            <p class="text-gray-600 mb-4">Choose your favorite items and customize your order</p>
+                            <button onclick="showPage('menu')" class="inline-block bg-cafe-blue hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full">View Menu</button>
+                        </div>
+                        
+                        <!-- Cart Summary -->
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h2 class="text-xl font-semibold mb-4">Your Order</h2>
+                            <div id="cart-items" class="mb-6">
+                                <p class="text-gray-500 text-center py-4">Your cart is empty. Select items from the menu to get started.</p>
+                            </div>
+                            
+                            <div class="border-t pt-4">
+                                <div class="flex justify-between mb-2">
+                                    <span>Subtotal</span>
+                                    <span id="subtotal">$0.00</span>
+                                </div>
+                                <div class="flex justify-between mb-2">
+                                    <span>Tax</span>
+                                    <span id="tax">$0.00</span>
+                                </div>
+                                <div class="flex justify-between font-semibold text-lg">
+                                    <span>Total</span>
+                                    <span id="total">$0.00</span>
+                                </div>
+                            </div>
+                            
+                            <button id="checkout-btn" class="w-full mt-6 bg-cafe-blue hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-full disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                Proceed to Checkout
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Checkout Form -->
+                    <div class="lg:w-1/3">
+                        <div class="bg-white rounded-lg shadow-md p-6 sticky top-24">
+                            <h2 class="text-xl font-semibold mb-4">Delivery Information</h2>
+                            
+                            <div class="mb-6">
+                                <label class="block text-gray-700 mb-2">Order Type</label>
+                                <div class="flex gap-4">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" class="form-radio text-cafe-blue" name="orderType" value="delivery" checked>
+                                        <span class="ml-2">Delivery</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" class="form-radio text-cafe-blue" name="orderType" value="pickup">
+                                        <span class="ml-2">Pickup</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div id="delivery-fields">
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 mb-2" for="address">Delivery Address</label>
+                                    <input type="text" id="address" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cafe-blue">
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 mb-2" for="apt">Apt/Suite (Optional)</label>
+                                    <input type="text" id="apt" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cafe-blue">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2" for="phone">Phone Number</label>
+                                <input type="tel" id="phone" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cafe-blue" placeholder="(123) 456-7890">
+                            </div>
+                            
+                            <div class="mb-6">
+                                <label class="block text-gray-700 mb-2" for="instructions">Special Instructions (Optional)</label>
+                                <textarea id="instructions" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cafe-blue" rows="3"></textarea>
+                            </div>
+                            
+                            <button class="w-full bg-cafe-blue hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-full">
+                                Place Order
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Page -->
+        <section id="about" class="page-section py-16 hidden">
+            <div class="max-w-4xl mx-auto px-4">
+                <h1 class="text-3xl md:text-4xl font-bold text-center mb-4 text-cafe-blue">Our Story</h1>
+                <p class="text-center text-gray-600 mb-10">Learn about our journey and values</p>
+                
+                <div class="bg-white rounded-lg shadow-md overflow-hidden mb-10">
+                    <div class="h-64 bg-cafe-blue flex items-center justify-center text-white text-6xl">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <div class="p-8">
+                        <h2 class="text-2xl font-semibold mb-4">From our garden to your cup</h2>
+                        <p class="mb-4">Happy Sips and Bites began in 2015 with a simple mission: to create a cozy space where people can enjoy high-quality, sustainably sourced coffee and food while connecting with nature.</p>
+                        <p class="mb-4">Our founder, Emily Rodriguez, was passionate about environmental conservation and wanted to build a business that reflected those values. What started as a small coffee cart at local farmers markets has grown into the welcoming café you see today.</p>
+                        <p>We're committed to reducing our environmental footprint through compostable packaging, energy-efficient equipment, and supporting local organic farmers. Every item on our menu is carefully crafted to be both delicious and environmentally responsible.</p>
+                    </div>
+                </div>
+                
+                <h2 class="text-2xl font-semibold text-center mb-6 text-cafe-blue">Our Values</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                        <div class="text-4xl text-cafe-blue mb-4">
+                            <i class="fas fa-recycle"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Sustainability</h3>
+                        <p class="text-gray-600">We prioritize eco-friendly practices in everything we do, from sourcing to waste reduction.</p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                        <div class="text-4xl text-cafe-blue mb-4">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Quality</h3>
+                        <p class="text-gray-600">We serve only the finest ingredients, carefully selected for flavor and ethical production.</p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                        <div class="text-4xl text-cafe-blue mb-4">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Community</h3>
+                        <p class="text-gray-600">We believe in building connections with our customers, staff, and local producers.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-cafe-white p-8 rounded-lg">
+                    <h2 class="text-2xl font-semibold text-center mb-6 text-cafe-blue">Visit Us</h2>
+                    <p class="text-center mb-6">We'd love to welcome you to our cozy space filled with plants, natural light, and the aroma of freshly brewed coffee.</p>
+                    <div class="text-center">
+                        <button onclick="showPage('contact')" class="inline-block bg-cafe-blue hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full">Get Directions</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Page -->
+        <section id="contact" class="page-section py-16 hidden">
+            <div class="max-w-6xl mx-auto px-4">
+                <h1 class="text-3xl md:text-4xl font-bold text-center mb-4 text-cafe-blue">Get in Touch</h1>
+                <p class="text-center text-gray-600 mb-10">We'd love to hear from you</p>
+                
+                <div class="flex flex-col lg:flex-row gap-8 mb-10">
+                    <!-- Contact Form -->
+                    <div class="lg:w-1/2">
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h2 class="text-xl font-semibold mb-4">Send us a message</h2>
+                            <form id="contact-form">
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 mb-2" for="name">Full Name</label>
+                                    <input type="text" id="name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cafe-blue" required>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 mb-2" for="email">Email Address</label>
+                                    <input type="email" id="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cafe-blue" required>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 mb-2" for="phone">Phone Number</label>
+                                    <input type="tel" id="phone" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cafe-blue">
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 mb-2" for="message">Message</label>
+                                    <textarea id="message" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cafe-blue" rows="5" required></textarea>
+                                </div>
+                                
+                                <button type="submit" class="w-full bg-cafe-blue hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-full">
+                                    Send Message
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Map and Contact Info -->
+                    <div class="lg:w-1/2">
+                        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                            <h2 class="text-xl font-semibold mb-4">Our Location</h2>
+                            <div class="map-container bg-cafe-blue h-64 mb-4 flex items-center justify-center text-white text-5xl">
+                                <i class="fas fa-map-marked-alt"></i>
+                            </div>
+                            <p class="text-center">123 Green Street, Natureville, NV 12345</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h2 class="text-xl font-semibold mb-4">Contact Information</h2>
+                            <div class="space-y-4">
+                                <div class="flex items-center">
+                                    <div class="text-cafe-blue text-xl w-8">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <span>(123) 456-7890</span>
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <div class="text-cafe-blue text-xl w-8">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <span>hello@happysipsandbites.com</span>
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <div class="text-cafe-blue text-xl w-8">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold">Opening Hours</p>
+                                        <p>Monday - Friday: 7am - 7pm</p>
+                                        <p>Saturday - Sunday: 8am - 6pm</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Page -->
+        <section id="faq" class="page-section py-16 hidden">
+            <div class="max-w-4xl mx-auto px-4">
+                <h1 class="text-3xl md:text-4xl font-bold text-center mb-4 text-cafe-blue">Frequently Asked Questions</h1>
+                <p class="text-center text-gray-600 mb-10">Find answers to common questions about our café</p>
+                
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <!-- FAQ Items -->
+                    <div class="faq-item">
+                        <button class="faq-question w-full text-left p-6 flex justify-between items-center hover:bg-cafe-white">
+                            <span class="font-semibold">Do you offer home delivery?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="p-6 bg-cafe-white">
+                                <p>Yes, we offer home delivery within a 5-mile radius of our café. Delivery fees start at $2.99 and vary based on distance. You can place delivery orders through our website or by calling us directly.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <button class="faq-question w-full text-left p-6 flex justify-between items-center hover:bg-cafe-white">
+                            <span class="font-semibold">What are your café timings?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="p-6 bg-cafe-white">
+                                <p>We are open:</p>
+                                <ul class="list-disc pl-5 mt-2">
+                                    <li>Monday - Friday: 7:00 AM to 7:00 PM</li>
+                                    <li>Saturday - Sunday: 8:00 AM to 6:00 PM</li>
+                                </ul>
+                                <p class="mt-2">Note: Hours may vary on holidays.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Additional FAQ items would go here -->
+                    
+                    <div class="faq-item">
+                        <button class="faq-question w-full text-left p-6 flex justify-between items-center hover:bg-cafe-white">
+                            <span class="font-semibold">Do you have vegan and gluten-free options?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="p-6 bg-cafe-white">
+                                <p>Yes, we offer a variety of vegan and gluten-free options. Our menu clearly marks these items with (V) for vegan and (GF) for gluten-free. We also take precautions to avoid cross-contamination, but please inform our staff about any severe allergies.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <button class="faq-question w-full text-left p-6 flex justify-between items-center hover:bg-cafe-white">
+                            <span class="font-semibold">Can I host a private event at the café?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="p-6 bg-cafe-white">
+                                <p>Absolutely! We love hosting private events after hours. We can accommodate groups of up to 30 people. Please contact us at events@happysipsandbites.com or call us at (123) 456-7890 to discuss availability and custom menu options.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-10">
+                    <p class="mb-4">Didn't find the answer you're looking for?</p>
+                    <button onclick="showPage('contact')" class="inline-block bg-cafe-blue hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full">Contact Us</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Legal Pages -->
+        <section id="legal" class="page-section py-16 hidden">
+            <div class="max-w-4xl mx-auto px-4">
+                <div id="terms-content" class="legal-content hidden">
+                    <h1 class="text-3xl md:text-4xl font-bold text-center mb-4 text-cafe-blue">Terms & Conditions</h1>
+                    <div class="bg-white rounded-lg shadow-md p-8">
+                        <h2 class="text-xl font-semibold mb-4">Website Usage</h2>
+                        <p class="mb-4">By accessing this website, you agree to be bound by these Terms and Conditions of Use, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws.</p>
+                        
+                        <h2 class="text-xl font-semibold mb-4">Orders</h2>
+                        <p class="mb-4">All orders placed through our website are subject to availability and confirmation of the order price. Dispatch times may vary according to availability and subject to any delays resulting from postal delays or force majeure for which we will not be responsible.</p>
+                        
+                        <h2 class="text-xl font-semibold mb-4">Disclaimer</h2>
+                        <p>The materials on Happy Sips and Bites Café's website are provided on an 'as is' basis. Happy Sips and Bites Café makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.</p>
+                    </div>
+                </div>
+                
+                <div id="privacy-content" class="legal-content hidden">
+                    <h1 class="text-3xl md:text-4xl font-bold text-center mb-4 text-cafe-blue">Privacy Policy</h1>
+                    <div class="bg-white rounded-lg shadow-md p-8">
+                        <h2 class="text-xl font-semibold mb-4">Information We Collect</h2>
+                        <p class="mb-4">We collect information you provide directly to us, such as when you create an account, place an order, subscribe to our newsletter, or contact us for support. This may include your name, email address, phone number, payment information, and any other information you choose to provide.</p>
+                        
+                        <h2 class="text-xl font-semibold mb-4">How We Use Your Information</h2>
+                        <p class="mb-4">We use the information we collect to provide, maintain, and improve our services, to process your transactions, to send you technical notices and support messages, to respond to your comments and questions, and to communicate with you about products and services offered by Happy Sips and Bites Café.</p>
+                        
+                        <h2 class="text-xl font-semibold mb-4">Data Security</h2>
+                        <p>We implement appropriate technical and organizational measures to protect the security of your personal information. However, please note that no method of transmission over the Internet or electronic storage is 100% secure.</p>
+                    </div>
+                </div>
+                
+                <!-- Additional legal content would go here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    
+        <!-- Why Choose Us (added) -->
+        <section id="chooseus" class="page-section py-16 hidden">
+            <div class="max-w-6xl mx-auto px-4 text-center">
+                <h1 class="text-3xl md:text-4xl font-bold mb-10 text-cafe-blue">Why Choose Us?</h1>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-6 bg-white rounded-lg shadow-md">
+                        <div class="text-5xl text-cafe-blue mb-4"><i class="fas fa-leaf"></i></div>
+                        <h3 class="text-xl font-semibold mb-2">Eco-Friendly</h3>
+                        <p class="text-gray-600">We use compostable packaging, support local farmers, and reduce waste every step of the way.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-lg shadow-md">
+                        <div class="text-5xl text-cafe-blue mb-4"><i class="fas fa-mug-hot"></i></div>
+                        <h3 class="text-xl font-semibold mb-2">Premium Quality</h3>
+                        <p class="text-gray-600">Our coffee beans and ingredients are ethically sourced to guarantee freshness and flavor.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-lg shadow-md">
+                        <div class="text-5xl text-cafe-blue mb-4"><i class="fas fa-heart"></i></div>
+                        <h3 class="text-xl font-semibold mb-2">Warm Atmosphere</h3>
+                        <p class="text-gray-600">Our cozy interiors and friendly staff make every visit a delightful experience.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Customer Reviews (added) -->
+        <section id="reviews" class="page-section py-16 hidden">
+            <div class="max-w-6xl mx-auto px-4">
+                <h1 class="text-3xl md:text-4xl font-bold text-center mb-10 text-cafe-blue">Customer Reviews</h1>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Sample Review 1 -->
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="flex items-center mb-4">
+                            <div class="text-yellow-400 mr-3">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                            <span class="text-sm text-gray-500">Aug 20, 2025</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">"Best café experience ever! The matcha latte is amazing and the vibe is perfect for work and relaxation."</p>
+                        <div class="flex items-center">
+                            <div class="h-10 w-10 rounded-full bg-cafe-blue flex items-center justify-center text-white mr-3"><i class="fas fa-user"></i></div>
+                            <div><span class="font-semibold block">Sarah M.</span><span class="text-sm text-gray-500">Regular Customer</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Sample Review 2 -->
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="flex items-center mb-4">
+                            <div class="text-yellow-400 mr-3">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span class="text-sm text-gray-500">Aug 15, 2025</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">"Lovely ambiance and eco-friendly values. I absolutely love the avocado toast and will keep coming back!"</p>
+                        <div class="flex items-center">
+                            <div class="h-10 w-10 rounded-full bg-cafe-blue flex items-center justify-center text-white mr-3"><i class="fas fa-user"></i></div>
+                            <div><span class="font-semibold block">James L.</span><span class="text-sm text-gray-500">Remote Worker</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Sample Review 3 -->
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="flex items-center mb-4">
+                            <div class="text-yellow-400 mr-3">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span class="text-sm text-gray-500">Aug 10, 2025</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">"Great service and delicious food. The outdoor patio with herbs is a real treat."</p>
+                        <div class="flex items-center">
+                            <div class="h-10 w-10 rounded-full bg-cafe-blue flex items-center justify-center text-white mr-3"><i class="fas fa-user"></i></div>
+                            <div><span class="font-semibold block">Maria K.</span><span class="text-sm text-gray-500">Food Blogger</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <footer class="bg-cafe-blue text-white py-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-leaf mr-2"></i> Happy Sips & Bites
+                    </h3>
+                    <p class="mb-4">A Perfect Sip, A Delicious Bite! Enjoy our sustainably sourced coffee and food in a cozy, plant-filled environment.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-white hover:text-cafe-white">
+                            <i class="fab fa-facebook-f text-xl"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-cafe-white">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-cafe-white">
+                            <i class="fab fa-whatsapp text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><button onclick="showPage('home')" class="hover:underline">Home</button></li>
+                        <li><button onclick="showPage('menu')" class="hover:underline">Menu</button></li>
+                        <li><button onclick="showPage('order')" class="hover:underline">Order Online</button></li>
+                        <li><button onclick="showPage('about')" class="hover:underline">About Us</button></li>
+                        <li><button onclick="showPage('contact')" class="hover:underline">Contact</button></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="legal-link hover:underline" data-content="terms">Terms & Conditions</a></li>
+                        <li><a href="#" class="legal-link hover:underline" data-content="privacy">Privacy Policy</a></li>
+                        <li><a href="#" class="legal-link hover:underline" data-content="refund">Refund Policy</a></li>
+                        <li><a href="#" class="legal-link hover:underline" data-content="disclaimer">Disclaimer</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-3"></i>
+                            <span>123 Green Street, Natureville, NV 12345</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone mr-3"></i>
+                            <span>(123) 456-7890</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3"></i>
+                            <span>hello@happysipsandbites.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-blue-700 mt-8 pt-8 text-center">
+                <p>&copy; 2023 Happy Sips and Bites Café. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (menuBtn && mobileMenu) {
+                menuBtn.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+            
+            // Navigation links
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    showPage(targetId);
+                    
+                    // Close mobile menu if open
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+            
+            // Legal links
+            const legalLinks = document.querySelectorAll('.legal-link');
+            legalLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const contentId = this.getAttribute('data-content');
+                    showLegalPage(contentId);
+                });
+            });
+            
+            // FAQ functionality
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', function() {
+                    const faqItem = this.parentElement;
+                    faqItem.classList.toggle('faq-active');
+                });
+            });
+            
+            // Menu category filtering
+            const categoryBtns = document.querySelectorAll('.category-btn');
+            const menuItems = document.querySelectorAll('.menu-item-card');
+            
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    
+                    // Update active button
+                    categoryBtns.forEach(b => {
+                        b.classList.remove('bg-cafe-blue', 'text-white');
+                        b.classList.add('bg-white', 'text-black', 'hover:bg-cafe-blue', 'hover:text-white');
+                    });
+                    
+                    this.classList.remove('bg-white', 'text-black', 'hover:bg-cafe-blue', 'hover:text-white');
+                    this.classList.add('bg-cafe-blue', 'text-white');
+                    
+                    // Filter items
+                    menuItems.forEach(item => {
+                        if (category === 'all' || item.getAttribute('data-category') === category) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Add to cart functionality
+            const addToCartBtns = document.querySelectorAll('.add-to-cart-btn');
+            const cartItems = document.getElementById('cart-items');
+            const subtotalEl = document.getElementById('subtotal');
+            const taxEl = document.getElementById('tax');
+            const totalEl = document.getElementById('total');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            
+            let cart = [];
+            
+            addToCartBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const menuItem = this.closest('.menu-item-card');
+                    const itemName = menuItem.querySelector('h3').textContent;
+                    const itemPrice = parseFloat(menuItem.querySelector('span').textContent.replace('$', ''));
+                    
+                    // Check if item already in cart
+                    const existingItem = cart.find(item => item.name === itemName);
+                    
+                    if (existingItem) {
+                        existingItem.quantity += 1;
+                    } else {
+                        cart.push({
+                            name: itemName,
+                            price: itemPrice,
+                            quantity: 1
+                        });
+                    }
+                    
+                    updateCart();
+                });
+            });
+            
+            function updateCart() {
+                // Clear cart display
+                cartItems.innerHTML = '';
+                
+                if (cart.length === 0) {
+                    cartItems.innerHTML = '<p class="text-gray-500 text-center py-4">Your cart is empty. Select items from the menu to get started.</p>';
+                    checkoutBtn.disabled = true;
+                } else {
+                    checkoutBtn.disabled = false;
+                    
+                    cart.forEach(item => {
+                        const cartItemEl = document.createElement('div');
+                        cartItemEl.classList.add('cart-item', 'flex', 'justify-between', 'items-center', 'py-2', 'border-b');
+                        
+                        cartItemEl.innerHTML = `
+                            <div>
+                                <h4 class="font-semibold">${item.name}</h4>
+                                <p class="text-gray-600">$${item.price.toFixed(2)}</p>
+                            </div>
+                            <div class="flex items-center">
+                                <button class="decrease-qty text-cafe-blue hover:text-green-600" data-name="${item.name}">
+                                    <i class="fas fa-minus-circle"></i>
+                                </button>
+                                <span class="mx-2">${item.quantity}</span>
+                                <button class="increase-qty text-cafe-blue hover:text-green-600" data-name="${item.name}">
+                                    <i class="fas fa-plus-circle"></i>
+                                </button>
+                                <button class="remove-item text-red-500 hover:text-red-700 ml-4" data-name="${item.name}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                        
+                        cartItems.appendChild(cartItemEl);
+                    });
+                    
+                    // Add event listeners to quantity buttons
+                    const decreaseBtns = document.querySelectorAll('.decrease-qty');
+                    const increaseBtns = document.querySelectorAll('.increase-qty');
+                    const removeBtns = document.querySelectorAll('.remove-item');
+                    
+                    decreaseBtns.forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const itemName = this.getAttribute('data-name');
+                            const cartItem = cart.find(item => item.name === itemName);
+                            
+                            if (cartItem.quantity > 1) {
+                                cartItem.quantity -= 1;
+                            } else {
+                                cart = cart.filter(item => item.name !== itemName);
+                            }
+                            
+                            updateCart();
+                        });
+                    });
+                    
+                    increaseBtns.forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const itemName = this.getAttribute('data-name');
+                            const cartItem = cart.find(item => item.name === itemName);
+                            cartItem.quantity += 1;
+                            updateCart();
+                        });
+                    });
+                    
+                    removeBtns.forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const itemName = this.getAttribute('data-name');
+                            cart = cart.filter(item => item.name !== itemName);
+                            updateCart();
+                        });
+                    });
+                }
+                
+                // Calculate totals
+                const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+                const tax = subtotal * 0.08; // 8% tax
+                const total = subtotal + tax;
+                
+                subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+                taxEl.textContent = `$${tax.toFixed(2)}`;
+                totalEl.textContent = `$${total.toFixed(2)}`;
+            }
+            
+            // Order type toggle
+            const orderTypeRadios = document.querySelectorAll('input[name="orderType"]');
+            const deliveryFields = document.getElementById('delivery-fields');
+            
+            orderTypeRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'delivery') {
+                        deliveryFields.style.display = 'block';
+                    } else {
+                        deliveryFields.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Contact form submission
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Thank you for your message! We will get back to you soon.');
+                    contactForm.reset();
+                });
+            }
+            
+            // Page visibility on scroll
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.page-section').forEach(section => {
+                observer.observe(section);
+            });
+            
+            // Show home page by default
+            showPage('home');
+        });
+        
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-section').forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.remove('hidden');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function showLegalPage(contentId) {
+            // Hide all legal content
+            document.querySelectorAll('.legal-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Show selected legal content
+            document.getElementById(`${contentId}-content`).classList.remove('hidden');
+            
+            // Show legal section
+            showPage('legal');
+        }
+    
+
+    // Carousel Logic (inserted)
+    (function(){
+        const track = document.getElementById('carousel-track');
+        if(!track) return;
+        let index = 0;
+        function updateCarousel() {
+            track.style.transform = `translateX(-${index * (track.querySelector('.carousel-card')?.offsetWidth + 24 || 320)}px)`;
+        }
+        function nextSlide() {
+            index = (index + 1) % track.children.length;
+            updateCarousel();
+        }
+        function prevSlide() {
+            index = (index - 1 + track.children.length) % track.children.length;
+            updateCarousel();
+        }
+        window.nextSlide = nextSlide;
+        window.prevSlide = prevSlide;
+        // handle resize to recalc
+        window.addEventListener('resize', updateCarousel);
+        // autoplay
+        let autoplay = setInterval(nextSlide, 4000);
+        // pause on hover
+        track.addEventListener('mouseenter', () => clearInterval(autoplay));
+        track.addEventListener('mouseleave', () => autoplay = setInterval(nextSlide, 4000));
+    })();
+
+</script>
+</body>
+</html>
